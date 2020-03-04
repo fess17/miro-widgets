@@ -1,0 +1,8 @@
+spring:
+  devtools:
+    livereload:
+      port: 35730
+server:
+  port: 8079
+  servlet:
+    context-path: /api
