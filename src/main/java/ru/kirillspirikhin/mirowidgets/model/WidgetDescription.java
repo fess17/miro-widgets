@@ -1,36 +1,38 @@
 package ru.kirillspirikhin.mirowidgets.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 /**
- * Описание виджета
+ * Описание виджета.
  */
 @Data
 @Builder
 @AllArgsConstructor
 public class WidgetDescription {
-    /**
-     * Координата X
-     */
-    private Integer x;
+  /**
+   * Координата X.
+   */
+  private Integer x;
 
-    /**
-     * Координата Y
-     */
-    private Integer y;
+  /**
+   * Координата Y.
+   */
+  private Integer y;
 
-    /**
-     * Координата Z
-     */
-    private Integer z;
+  /**
+   * Координата Z.
+   */
+  private Integer z;
 
-    /**
-     * Ширина
-     */
-    private Integer width;
+  /**
+   * Ширина.
+   */
+  private Integer width;
 
-    /**
-     * Высота
-     */
-    private Integer height;
+  /**
+   * Высота.
+   */
+  private Integer height;
 }

@@ -32,277 +32,330 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Тестирование контроллера")
 class MiroWidgetsApplicationTests {
 
-    private final MockMvc mockMvc;
+  private final MockMvc mockMvc;
 
-    @Test
-    @DisplayName("Поднятие контекста")
-    void contextLoads() {
-        Assertions.assertTrue(true);
-    }
+  @Test
+  @DisplayName("Поднятие контекста")
+  void contextLoads() {
+    Assertions.assertTrue(true);
+  }
 
-    @Test
-    @DisplayName("Успешное создание виджета")
-    void createWidgetOk() throws Exception {
-        WidgetDescription wd = WidgetDescription.builder()
-                .x(0)
-                .y(1)
-                .z(2)
-                .height(3)
-                .width(4).build();
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/create")
-                .param("x", String.valueOf(wd.getX()))
-                .param("y", String.valueOf(wd.getY()))
-                .param("z", String.valueOf(wd.getZ()))
-                .param("height", String.valueOf(wd.getHeight()))
-                .param("width", String.valueOf(wd.getWidth()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-        String res = result.getResponse().getContentAsString();
-        log.info(res);
-        assertNotEquals("", res);
-    }
+  @Test
+  @DisplayName("Успешное создание виджета")
+  void createWidgetOk() throws Exception {
+    WidgetDescription wd = WidgetDescription.builder()
+        .x(0)
+        .y(1)
+        .z(2)
+        .height(3)
+        .width(4).build();
+    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/create")
+        .param("x", String.valueOf(wd.getX()))
+        .param("y", String.valueOf(wd.getY()))
+        .param("z", String.valueOf(wd.getZ()))
+        .param("height", String.valueOf(wd.getHeight()))
+        .param("width", String.valueOf(wd.getWidth()))
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andReturn();
+    String res = result.getResponse().getContentAsString();
+    log.info(res);
+    assertNotEquals("", res);
+  }
 
-    @Test
-    @DisplayName("Неверное описание виджета при создании")
-    void createWidgetPreconditionFailed() throws Exception {
-        WidgetDescription wd = WidgetDescription.builder()
-                .x(0)
-                .y(1)
-                .z(2)
-                .height(-3)
-                .width(4).build();
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/create")
-                .characterEncoding("UTF-8")
-                .param("x", String.valueOf(wd.getX()))
-                .param("y", String.valueOf(wd.getY()))
-                .param("z", String.valueOf(wd.getZ()))
-                .param("height", String.valueOf(wd.getHeight()))
-                .param("width", String.valueOf(wd.getWidth()))
-                .accept(MediaType.ALL))
-                .andExpect(status().isPreconditionFailed())
-                .andReturn();
-        String res = result.getResponse().getContentAsString();
-        log.info(res);
-        assertNotEquals("", res);
-    }
+  @Test
+  @DisplayName("Неверное описание виджета при создании")
+  void createWidgetPreconditionFailed() throws Exception {
+    WidgetDescription wd = WidgetDescription.builder()
+        .x(0)
+        .y(1)
+        .z(2)
+        .height(-3)
+        .width(4).build();
+    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/create")
+        .characterEncoding("UTF-8")
+        .param("x", String.valueOf(wd.getX()))
+        .param("y", String.valueOf(wd.getY()))
+        .param("z", String.valueOf(wd.getZ()))
+        .param("height", String.valueOf(wd.getHeight()))
+        .param("width", String.valueOf(wd.getWidth()))
+        .accept(MediaType.ALL))
+        .andExpect(status().isPreconditionFailed())
+        .andReturn();
+    String res = result.getResponse().getContentAsString();
+    log.info(res);
+    assertNotEquals("", res);
+  }
 
-    @Test
-    @DisplayName("Успешное получение виджета по его id")
-    void getWidgetByIdOk() throws Exception {
-        WidgetDescription wd = WidgetDescription.builder()
-                .x(0)
-                .y(1)
-                .z(2)
-                .height(3)
-                .width(4).build();
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/create")
-                .param("x", String.valueOf(wd.getX()))
-                .param("y", String.valueOf(wd.getY()))
-                .param("z", String.valueOf(wd.getZ()))
-                .param("height", String.valueOf(wd.getHeight()))
-                .param("width", String.valueOf(wd.getWidth()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-        String res = result.getResponse().getContentAsString();
-        log.info(res);
-        UUID id = UUID.fromString(JsonPath.parse(res).read("$.id"));
-        result = mockMvc.perform(
-            MockMvcRequestBuilders.get("/get/{id}", id)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id.toString()))
-            .andReturn();
-        String res1 = result.getResponse().getContentAsString();
-        log.info(res1);
-        assertEquals(res1, res);
-    }
+  @Test
+  @DisplayName("Успешное получение виджета по его id")
+  void getWidgetByIdOk() throws Exception {
+    WidgetDescription wd = WidgetDescription.builder()
+        .x(0)
+        .y(1)
+        .z(2)
+        .height(3)
+        .width(4).build();
+    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/create")
+        .param("x", String.valueOf(wd.getX()))
+        .param("y", String.valueOf(wd.getY()))
+        .param("z", String.valueOf(wd.getZ()))
+        .param("height", String.valueOf(wd.getHeight()))
+        .param("width", String.valueOf(wd.getWidth()))
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andReturn();
+    String res = result.getResponse().getContentAsString();
+    log.info(res);
+    UUID id = UUID.fromString(JsonPath.parse(res).read("$.id"));
+    result = mockMvc.perform(
+        MockMvcRequestBuilders.get("/get/{id}", id)
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id.toString()))
+        .andReturn();
+    String res1 = result.getResponse().getContentAsString();
+    log.info(res1);
+    assertEquals(res1, res);
+  }
 
-    @Test
-    @DisplayName("Виджет с таким id не найден")
-    void getWidgetByIdNotFound() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(
-            MockMvcRequestBuilders.get("/get/{id}", UUID.randomUUID())
-                .characterEncoding("UTF-8")
-                .accept(MediaType.ALL))
-                .andExpect(status().isNotFound())
-                .andReturn();
-        String res = mvcResult.getResponse().getContentAsString();
-        log.info(res);
-        assertNotEquals("", res);
-    }
+  @Test
+  @DisplayName("Виджет с таким id не найден")
+  void getWidgetByIdNotFound() throws Exception {
+    MvcResult mvcResult = mockMvc.perform(
+        MockMvcRequestBuilders.get("/get/{id}", UUID.randomUUID())
+            .characterEncoding("UTF-8")
+            .accept(MediaType.ALL))
+        .andExpect(status().isNotFound())
+        .andReturn();
+    String res = mvcResult.getResponse().getContentAsString();
+    log.info(res);
+    assertNotEquals("", res);
+  }
 
-    @Test
-    @DisplayName("Успешное редактирование виджета")
-    void editWidgetOk() throws Exception {
-        WidgetDescription wd = WidgetDescription.builder()
-                .x(0)
-                .y(1)
-                .z(2)
-                .height(3)
-                .width(4).build();
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/create")
-                .param("x", String.valueOf(wd.getX()))
-                .param("y", String.valueOf(wd.getY()))
-                .param("z", String.valueOf(wd.getZ()))
-                .param("height", String.valueOf(wd.getHeight()))
-                .param("width", String.valueOf(wd.getWidth()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-        String res = result.getResponse().getContentAsString();
-        log.info(res);
-        UUID id1 = UUID.fromString(JsonPath.parse(res).read("$.id"));
-        LocalDateTime ldt1 = LocalDateTime.parse(JsonPath.parse(res).read("$.modifiedDate"));
-        wd = WidgetDescription.builder()
-                .x(1)
-                .y(2)
-                .z(3)
-                .height(4)
-                .width(5).build();
-        result = mockMvc.perform(MockMvcRequestBuilders.patch("/edit/{id}", id1)
-                .param("x", String.valueOf(wd.getX()))
-                .param("y", String.valueOf(wd.getY()))
-                .param("z", String.valueOf(wd.getZ()))
-                .param("height", String.valueOf(wd.getHeight()))
-                .param("width", String.valueOf(wd.getWidth()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-        res = result.getResponse().getContentAsString();
-        log.info(res);
-        UUID id2 = UUID.fromString(JsonPath.parse(res).read("$.id"));
-        LocalDateTime ldt2 = LocalDateTime.parse(JsonPath.parse(res).read("$.modifiedDate"));
-        int x = JsonPath.parse(res).read("$.x");
-        int y = JsonPath.parse(res).read("$.y");
-        int z = JsonPath.parse(res).read("$.z");
-        int height = JsonPath.parse(res).read("$.height");
-        int width = JsonPath.parse(res).read("$.width");
-        assertEquals(id1, id2);
-        assertNotEquals(ldt1, ldt2);
-        assertEquals(wd.getX(), x);
-        assertEquals(wd.getY(), y);
-        assertEquals(wd.getZ(), z);
-        assertEquals(wd.getHeight(), height);
-        assertEquals(wd.getWidth(), width);
-    }
+  @Test
+  @DisplayName("Успешное редактирование виджета")
+  void editWidgetOk() throws Exception {
+    WidgetDescription wd = WidgetDescription.builder()
+        .x(0)
+        .y(1)
+        .z(2)
+        .height(3)
+        .width(4).build();
+    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/create")
+        .param("x", String.valueOf(wd.getX()))
+        .param("y", String.valueOf(wd.getY()))
+        .param("z", String.valueOf(wd.getZ()))
+        .param("height", String.valueOf(wd.getHeight()))
+        .param("width", String.valueOf(wd.getWidth()))
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andReturn();
+    String res = result.getResponse().getContentAsString();
+    log.info(res);
+    UUID id1 = UUID.fromString(JsonPath.parse(res).read("$.id"));
+    LocalDateTime ldt1 = LocalDateTime.parse(JsonPath.parse(res).read("$.modifiedDate"));
+    wd = WidgetDescription.builder()
+        .x(1)
+        .y(2)
+        .z(3)
+        .height(4)
+        .width(5).build();
+    result = mockMvc.perform(MockMvcRequestBuilders.patch("/edit/{id}", id1)
+        .param("x", String.valueOf(wd.getX()))
+        .param("y", String.valueOf(wd.getY()))
+        .param("z", String.valueOf(wd.getZ()))
+        .param("height", String.valueOf(wd.getHeight()))
+        .param("width", String.valueOf(wd.getWidth()))
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+    res = result.getResponse().getContentAsString();
+    log.info(res);
+    UUID id2 = UUID.fromString(JsonPath.parse(res).read("$.id"));
+    LocalDateTime ldt2 = LocalDateTime.parse(JsonPath.parse(res).read("$.modifiedDate"));
+    int x = JsonPath.parse(res).read("$.x");
+    int y = JsonPath.parse(res).read("$.y");
+    int z = JsonPath.parse(res).read("$.z");
+    int height = JsonPath.parse(res).read("$.height");
+    int width = JsonPath.parse(res).read("$.width");
+    assertEquals(id1, id2);
+    assertNotEquals(ldt1, ldt2);
+    assertEquals(wd.getX(), x);
+    assertEquals(wd.getY(), y);
+    assertEquals(wd.getZ(), z);
+    assertEquals(wd.getHeight(), height);
+    assertEquals(wd.getWidth(), width);
+  }
 
-    @Test
-    @DisplayName("Попытка редактирования несуществующего виджета")
-    void editWidgetNotFound() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/edit/{id}", UUID.randomUUID())
-                .characterEncoding("UTF-8")
-                .accept(MediaType.ALL))
-                .andExpect(status().isNotFound())
-                .andReturn();
-        String res = mvcResult.getResponse().getContentAsString();
-        log.info(res);
-        assertNotEquals("", res);
-    }
+  @Test
+  @DisplayName("Попытка редактирования несуществующего виджета")
+  void editWidgetNotFound() throws Exception {
+    MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/edit/{id}", UUID.randomUUID())
+        .characterEncoding("UTF-8")
+        .accept(MediaType.ALL))
+        .andExpect(status().isNotFound())
+        .andReturn();
+    String res = mvcResult.getResponse().getContentAsString();
+    log.info(res);
+    assertNotEquals("", res);
+  }
 
-    @Test
-    @DisplayName("Редактирование виджета с некорректными параметрами")
-    void editWidgetPreconditionFailed() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/edit/{id}", UUID.randomUUID())
-                .characterEncoding("UTF-8")
-                .param("height", String.valueOf(-1))
-                .accept(MediaType.ALL))
-                .andExpect(status().isPreconditionFailed())
-                .andReturn();
-        String res = mvcResult.getResponse().getContentAsString();
-        log.info(res);
-        assertNotEquals("", res);
-    }
+  @Test
+  @DisplayName("Редактирование виджета с некорректными параметрами")
+  void editWidgetPreconditionFailed() throws Exception {
+    MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/edit/{id}", UUID.randomUUID())
+        .characterEncoding("UTF-8")
+        .param("height", String.valueOf(-1))
+        .accept(MediaType.ALL))
+        .andExpect(status().isPreconditionFailed())
+        .andReturn();
+    String res = mvcResult.getResponse().getContentAsString();
+    log.info(res);
+    assertNotEquals("", res);
+  }
 
-    @Test
-    @DisplayName("Успешное удаление виджета")
-    void deleteWidgetOk() throws Exception {
-        WidgetDescription wd = WidgetDescription.builder()
-                .x(0)
-                .y(1)
-                .z(2)
-                .height(3)
-                .width(4).build();
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/create")
-                .param("x", String.valueOf(wd.getX()))
-                .param("y", String.valueOf(wd.getY()))
-                .param("z", String.valueOf(wd.getZ()))
-                .param("height", String.valueOf(wd.getHeight()))
-                .param("width", String.valueOf(wd.getWidth()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-        String res = result.getResponse().getContentAsString();
-        log.info(res);
-        UUID id = UUID.fromString(JsonPath.parse(res).read("$.id"));
-        result = mockMvc.perform(
-                MockMvcRequestBuilders.delete("/delete/{id}", id)
-                        .characterEncoding("UTF-8")
-                        .accept(MediaType.ALL))
-                .andExpect(status().isOk())
-                .andReturn();
-        res = result.getResponse().getContentAsString();
-        log.info(res);
-        assertEquals("true", res);
-    }
+  @Test
+  @DisplayName("Успешное удаление виджета")
+  void deleteWidgetOk() throws Exception {
+    WidgetDescription wd = WidgetDescription.builder()
+        .x(0)
+        .y(1)
+        .z(2)
+        .height(3)
+        .width(4).build();
+    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/create")
+        .param("x", String.valueOf(wd.getX()))
+        .param("y", String.valueOf(wd.getY()))
+        .param("z", String.valueOf(wd.getZ()))
+        .param("height", String.valueOf(wd.getHeight()))
+        .param("width", String.valueOf(wd.getWidth()))
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andReturn();
+    String res = result.getResponse().getContentAsString();
+    log.info(res);
+    UUID id = UUID.fromString(JsonPath.parse(res).read("$.id"));
+    result = mockMvc.perform(
+        MockMvcRequestBuilders.delete("/delete/{id}", id)
+            .characterEncoding("UTF-8")
+            .accept(MediaType.ALL))
+        .andExpect(status().isOk())
+        .andReturn();
+    res = result.getResponse().getContentAsString();
+    log.info(res);
+    assertEquals("true", res);
+  }
 
-    @Test
-    @DisplayName("Попытка удаления несуществующего виджета")
-    void deleteWidgetNotFound() throws Exception {
-        MvcResult result = mockMvc.perform(
-            MockMvcRequestBuilders.delete("/delete/{id}", UUID.randomUUID())
-                .characterEncoding("UTF-8")
-                .accept(MediaType.ALL))
-                .andExpect(status().isNotFound())
-                .andReturn();
-        String res = result.getResponse().getContentAsString();
-        log.info(res);
-        assertNotEquals("", res);
-    }
+  @Test
+  @DisplayName("Попытка удаления несуществующего виджета")
+  void deleteWidgetNotFound() throws Exception {
+    MvcResult result = mockMvc.perform(
+        MockMvcRequestBuilders.delete("/delete/{id}", UUID.randomUUID())
+            .characterEncoding("UTF-8")
+            .accept(MediaType.ALL))
+        .andExpect(status().isNotFound())
+        .andReturn();
+    String res = result.getResponse().getContentAsString();
+    log.info(res);
+    assertNotEquals("", res);
+  }
 
-    @Test
-    @DisplayName("Получение всех виджетов")
-    void getAllWidgets() throws Exception {
-        WidgetDescription wd = WidgetDescription.builder()
-                .x(0)
-                .y(1)
-                .z(2)
-                .height(3)
-                .width(4).build();
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/create")
-                .param("x", String.valueOf(wd.getX()))
-                .param("y", String.valueOf(wd.getY()))
-                .param("z", String.valueOf(wd.getZ()))
-                .param("height", String.valueOf(wd.getHeight()))
-                .param("width", String.valueOf(wd.getWidth()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-        String res = result.getResponse().getContentAsString();
-        UUID id1 = UUID.fromString(JsonPath.parse(res).read("$.id"));
-        result = mockMvc.perform(MockMvcRequestBuilders.put("/create")
-                .param("x", String.valueOf(wd.getX()))
-                .param("y", String.valueOf(wd.getY()))
-                .param("z", String.valueOf(wd.getZ()))
-                .param("height", String.valueOf(wd.getHeight()))
-                .param("width", String.valueOf(wd.getWidth()))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-        res = result.getResponse().getContentAsString();
-        UUID id2 = UUID.fromString(JsonPath.parse(res).read("$.id"));
-        log.info(res);
-        result = mockMvc.perform(MockMvcRequestBuilders.get("/getAll")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-        res = result.getResponse().getContentAsString();
-        UUID id11 = UUID.fromString(JsonPath.parse(res).read("$[1].id"));
-        UUID id21 = UUID.fromString(JsonPath.parse(res).read("$[0].id"));
-        assertNotEquals("", res);
-        assertEquals(id1.toString(), id11.toString());
-        assertEquals(id2.toString(), id21.toString());
-    }
+  @Test
+  @DisplayName("Получение всех виджетов")
+  void getAllWidgets() throws Exception {
+    WidgetDescription wd = WidgetDescription.builder()
+        .x(0)
+        .y(1)
+        .z(2)
+        .height(3)
+        .width(4).build();
+    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/create")
+        .param("x", String.valueOf(wd.getX()))
+        .param("y", String.valueOf(wd.getY()))
+        .param("z", String.valueOf(wd.getZ()))
+        .param("height", String.valueOf(wd.getHeight()))
+        .param("width", String.valueOf(wd.getWidth()))
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andReturn();
+    String res = result.getResponse().getContentAsString();
+    UUID id1 = UUID.fromString(JsonPath.parse(res).read("$.id"));
+    result = mockMvc.perform(MockMvcRequestBuilders.post("/create")
+        .param("x", String.valueOf(wd.getX()))
+        .param("y", String.valueOf(wd.getY()))
+        .param("z", String.valueOf(wd.getZ()))
+        .param("height", String.valueOf(wd.getHeight()))
+        .param("width", String.valueOf(wd.getWidth()))
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andReturn();
+    res = result.getResponse().getContentAsString();
+    UUID id2 = UUID.fromString(JsonPath.parse(res).read("$.id"));
+    log.info(res);
+    result = mockMvc.perform(MockMvcRequestBuilders.get("/getAll")
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+    res = result.getResponse().getContentAsString();
+    UUID id11 = UUID.fromString(JsonPath.parse(res).read("$.widgets[1].id"));
+    UUID id21 = UUID.fromString(JsonPath.parse(res).read("$.widgets[0].id"));
+    assertNotEquals("", res);
+    assertEquals(id1.toString(), id11.toString());
+    assertEquals(id2.toString(), id21.toString());
+  }
+
+  @Test
+  @DisplayName("Получение всех виджетов постранично")
+  void getAllWidgetsPaged() throws Exception {
+    MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/get")
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+    final String emptyParamsRes = mvcResult.getResponse().getContentAsString();
+    Assertions.assertAll("Пустые параметры",
+        () -> assertEquals(0, (int) JsonPath.parse(emptyParamsRes).read("$.currentPage")),
+        () -> assertEquals(10, (int) JsonPath.parse(emptyParamsRes).read("$.pageSize")));
+
+    mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/get")
+        .param("page", "-1")
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+    final String negativePageRes = mvcResult.getResponse().getContentAsString();
+    Assertions.assertAll("Запрошен отрицательный номер страницы",
+        () -> assertEquals(0, (int) JsonPath.parse(negativePageRes).read("$.currentPage")),
+        () -> assertEquals(10, (int) JsonPath.parse(negativePageRes).read("$.pageSize")));
+
+    mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/get")
+        .param("page", "1")
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+    final String pageNotPresentRes = mvcResult.getResponse().getContentAsString();
+    Assertions.assertAll("Запрошен номер страницы, которая не существует",
+        () -> assertEquals(1, (int) JsonPath.parse(pageNotPresentRes).read("$.currentPage")),
+        () -> assertEquals(10, (int) JsonPath.parse(pageNotPresentRes).read("$.pageSize")));
+
+    mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/get")
+        .param("size", "-1")
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+    final String negativeSizeRes = mvcResult.getResponse().getContentAsString();
+    Assertions.assertAll("Запрошен отрицательный размер страницы",
+        () -> assertEquals(0, (int) JsonPath.parse(negativeSizeRes).read("$.currentPage")),
+        () -> assertEquals(10, (int) JsonPath.parse(negativeSizeRes).read("$.pageSize")));
+
+    mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/get")
+        .param("size", "501")
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+    final String size501 = mvcResult.getResponse().getContentAsString();
+    Assertions.assertAll("Запрошен слишком большой номер страницы",
+        () -> assertEquals(0, (int) JsonPath.parse(size501).read("$.currentPage")),
+        () -> assertEquals(500, (int) JsonPath.parse(size501).read("$.pageSize")));
+  }
 
 }

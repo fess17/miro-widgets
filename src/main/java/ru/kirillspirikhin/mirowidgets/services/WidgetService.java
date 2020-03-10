@@ -1,55 +1,77 @@
 package ru.kirillspirikhin.mirowidgets.services;
 
+import java.util.UUID;
+import org.springframework.data.domain.Pageable;
 import ru.kirillspirikhin.mirowidgets.exceptions.WidgetNotFoundException;
+import ru.kirillspirikhin.mirowidgets.model.PagedWidgets;
 import ru.kirillspirikhin.mirowidgets.model.Widget;
 import ru.kirillspirikhin.mirowidgets.model.WidgetDescription;
 
-import java.util.UUID;
-
 /**
- * Сервис для работы с виджетами
+ * Сервис для работы с виджетами.
  */
 public interface WidgetService {
-    /**
-     * Доабвить виджет
-     * @param widgetDescription описание виджета
-     * @return добавленный виджет
-     */
-    Widget addWidget(WidgetDescription widgetDescription);
 
-    /**
-     * Получить виджет по его ИД
-     * @param id ИД виджета
-     * @return виджет
-     * @throws WidgetNotFoundException если виджет не найден
-     */
-    Widget getById(UUID id) throws WidgetNotFoundException;
+  /**
+   * Доабвить виджет.
+   *
+   * @param widgetDescription описание виджета
+   * @return добавленный виджет
+   */
+  Widget addWidget(WidgetDescription widgetDescription);
 
-    /**
-     * Редактировать виджета
-     * @param id ИД виджета
-     * @param description описание виджета
-     * @return отредактированный видджет
-     * @throws WidgetNotFoundException если виджет не найден
-     */
-    Widget editWidget(UUID id, WidgetDescription description)
-            throws WidgetNotFoundException;
+  /**
+   * Получить виджет по его ИД.
+   *
+   * @param id ИД виджета
+   * @return виджет
+   * @throws WidgetNotFoundException если виджет не найден
+   */
+  Widget getById(UUID id) throws WidgetNotFoundException;
 
-    /**
-     * Удалить виджет
-     * @param id ИД виджета
-     * @return признак того, что виджет с аким ИД был удален
-     */
-    boolean deleteWidget(UUID id);
+  /**
+   * Редактировать виджета.
+   *
+   * @param id          ИД виджета
+   * @param description описание виджета
+   * @return отредактированный видджет
+   * @throws WidgetNotFoundException если виджет не найден
+   */
+  Widget editWidget(UUID id, WidgetDescription description)
+      throws WidgetNotFoundException;
 
-    /**
-     * Получить все виджеты
-     * @return список виджетов
-     */
-    Widget[] getAllWidgets();
+  /**
+   * Удалить виджет.
+   *
+   * @param id ИД виджета
+   * @return признак того, что виджет с аким ИД был удален
+   */
+  boolean deleteWidget(UUID id);
 
-    /**
-     * Удалить все виджеты
-     */
-    void deleteAllWidgets();
+  /**
+   * Получить все виджеты.
+   *
+   * @return список виджетов
+   */
+  PagedWidgets getAllWidgets();
+
+  /**
+   * Получить все виджеты.
+   *
+   * @param page страница
+   * @return список виджетов
+   */
+  PagedWidgets getAllWidgets(Pageable page);
+
+  /**
+   * Удалить все виджеты.
+   */
+  void deleteAllWidgets();
+
+  /**
+   * Количество виджетов.
+   *
+   * @return количество виджетов
+   */
+  int size();
 }

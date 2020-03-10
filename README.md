@@ -1,7 +1,9 @@
-# Miro Widgets
+# Miro Widgets. Complication 1
 
 ### Предметная область
 [Задание](https://docs.google.com/document/d/1-4Gor5-k5ORPhcsPC70W_DjEQcaF2c7KcMUPPe16Eik/edit#heading=h.siniuthmcgrd)
+
+
 
 ### Описание реализации
 Maven-проект состоит из одного модуля.
