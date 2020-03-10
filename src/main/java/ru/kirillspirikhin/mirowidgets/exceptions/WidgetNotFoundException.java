@@ -1,27 +1,27 @@
 package ru.kirillspirikhin.mirowidgets.exceptions;
 
+import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.UUID;
 
 /**
- * Виджет не найден
+ * Виджет не найден.
  */
 @RequiredArgsConstructor
 @Getter
 public class WidgetNotFoundException extends Exception {
 
-    /**
-     * ИД виджета
-     */
-    private final UUID id;
+  /**
+   * ИД виджета.
+   */
+  private final UUID id;
 
-    /**
-     * сообщение
-     */
-    @Override
-    public String getMessage() {
-        return String.format("Виджет с id = %s не найден", id);
-    }
+  /**
+   * сообщение.
+   */
+  @Override
+  public String getMessage() {
+    return String.format("Виджет с id = %s не найден", id);
+  }
 }

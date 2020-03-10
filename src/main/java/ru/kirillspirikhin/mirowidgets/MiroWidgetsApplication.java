@@ -8,8 +8,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class MiroWidgetsApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(MiroWidgetsApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(MiroWidgetsApplication.class, args);
+  }
 
 }
