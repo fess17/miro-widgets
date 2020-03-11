@@ -24,7 +24,7 @@ import ru.kirillspirikhin.mirowidgets.services.WidgetService;
 /**
  * Контроллер для работы с виджетами.
  */
-@RestController()
+@RestController
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class WidgetController {
 

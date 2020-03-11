@@ -1,8 +1,75 @@
 spring:
+  application:
+    name: miro-widgets
   devtools:
     livereload:
       port: 35730
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
 server:
   port: 8079
   servlet:
     context-path: /api
+zuul:
+  RateLimitPreFilter:
+    pre:
+      disable: true
+  routes:
+    serviceCreate:
+      path: /create
+      url: forward:/
+    serviceGetById:
+      path: /get/**
+      url: forward:/get
+    serviceEdit:
+      path: /edit/**
+      url: forward:/edit
+    serviceDelete:
+      path: /delete/**
+      url: forward:/delete
+    serviceGetAll:
+      path: /getAll
+      url: forward:/
+    serviceAdmin:
+      path: /admin/**
+      url: forward:/admin
+  ratelimit:
+    enabled: true
+    repository: jpa
+    add-response-headers: true
+    policy-list:
+      serviceCreate:
+        - limit: 1000
+          refresh-interval: 60
+          breakOnMatch: true
+      serviceGetById:
+        - limit: 1000
+          refresh-interval: 60
+          breakOnMatch: true
+      serviceEdit:
+        - limit: 1000
+          refresh-interval: 60
+          breakOnMatch: true
+      serviceDelete:
+        - limit: 1000
+          refresh-interval: 60
+          breakOnMatch: true
+      serviceGetAll:
+        - limit: 200
+          refresh-interval: 60
+          breakOnMatch: true
+  strip-prefix: true
+logging:
+  level:
+    org:
+      springframework:
+        boot:
+          autoconfigure: INFO
+        web: DEBUG
+        cloud:
+          netflix: DEBUG

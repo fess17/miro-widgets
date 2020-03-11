@@ -11,11 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.kirillspirikhin.mirowidgets.config.RateLimitFilter;
 import ru.kirillspirikhin.mirowidgets.model.WidgetDescription;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,10 +29,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Slf4j
+@TestPropertySource(locations = "classpath:application.yml")
 @DisplayName("Тестирование контроллера")
 class MiroWidgetsApplicationTests {
 
   private final MockMvc mockMvc;
+
+  @MockBean
+  private RateLimitFilter rateLimitFilter;
 
   @Test
   @DisplayName("Поднятие контекста")

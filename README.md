@@ -1,10 +1,12 @@
-# Miro Widgets
+# Miro Widgets. Complication 3
 
 ### Предметная область
 [Задание](https://docs.google.com/document/d/1-4Gor5-k5ORPhcsPC70W_DjEQcaF2c7KcMUPPe16Eik/edit#heading=h.siniuthmcgrd)
 
 ### Описание реализации
 Maven-проект состоит из одного модуля.
+
+Rate limiting реализован на базе spring-cloud-starter-netflix-zuul + spring-cloud-zuul-ratelimit
 
 <b>Для локальной сборки проекта необходимо, чтобы было установленно следующее ПО:</b>
 - JDK 1.8
@@ -22,3 +24,6 @@ Maven-проект состоит из одного модуля.
 
 <b>Порядок развертывания приложения:</b>
 - На узле 1 разворачивается приложение и запускается: "java -jar miro-widgets-0.0.1-SNAPSHOT.jar". <br>
+
+
+#### ВНИМАНИЕ! НЕ ПОКРЫТО ТЕСТАМИ!!!
